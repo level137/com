@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<title>WebCat</title>
+  </head>
+  
+        <style>
+             body{
+
+              background-color:black;
+              display:flex;
+               justify-content:center;
+               height:100vh;
+               align-items:center;
+
+       }
+
+
+        p{
+        color:white;
+        animation:  gongde  1.6s   infinite;
+       
+       }
+       @keyframes  gongde{
+                0%{
+                            opacity:0;
+                            trsnsform:translateY(0);
+          }
+                100%{
+                         opacity:1;
+                         transform:translateY(-20px);
+               }
+ 
+          }
+
+
+    
+       </style>
+ 
+  <body>
+         <p>百年更一次</p>
+  
+  </body>
+</html>
