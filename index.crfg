@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>交互实例</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:微软雅黑}
+body{
+  background:#22242b;
+  color:#fff;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+}
+
+.card{
+  width:320px;
+  background:#30333b;
+  padding:24px;
+  border-radius:10px;
+  box-shadow:0 8px 24px rgba(0,0,0,0.4);
+  text-align:center;
+  position:relative;
+}
+
+.title{
+  font-size:20px;
+  margin-bottom:20px;
+  transition: all 1s ease;
+}
+.title.hide{
+  opacity:0;
+  height:0;
+  margin:0;
+  overflow:hidden;
+}
+
+.btn{
+  display:block;
+  width:100%;
+  padding:12px;
+  margin:6px 0;
+  background:#e94560;
+  border:none;
+  color:white;
+  border-radius:6px;
+  font-size:16px;
+  transition: all 0.15s ease;
+}
+.btn:active{
+  transform: scale(0.96);
+  background:#c73850;
+}
+
+.page-container{
+  position:relative;
+  height:340px;
+}
+.page{
+  position:absolute;
+  width:100%;
+  top:0;
+  left:0;
+  transition: all 1s ease;
+  opacity:1;
+  transform: scale(1);
+}
+.page.hide{
+  opacity:0;
+  transform: scale(0.9);
+  pointer-events:none;
+}
+
+.progress-box{
+  width:100%;
+  height:20px;
+  background:#444;
+  border-radius:6px;
+  margin:20px 0;
+  overflow:hidden;
+  position:relative;
+  transition: all 0.5s ease;
+}
+.progress-box.hide{
+  opacity:0;
+  height:0;
+  margin:0;
+}
+.progress-bar{
+  height:100%;
+  width:0%;
+  background:#4cd964;
+  border-radius:6px;
+  transition: width 0.3s ease;
+}
+.progress-text{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  line-height:20px;
+  text-align:center;
+  font-size:14px;
+  color:#fff;
+}
+
+.input-box{
+  width:100%;
+  padding:12px;
+  margin:10px 0 8px;
+  border-radius:6px;
+  border:none;
+  font-size:16px;
+  outline:none;
+  background:#3a3d47;
+  box-shadow:inset 2px 2px 6px rgba(0,0,0,0.3);
+  color:#fff;
+  transition: all 0.5s ease;
+}
+.input-box.hide{
+  opacity:0;
+  height:0;
+  margin:0;
+  padding:0;
+}
+.input-box::placeholder{
+  color:#aaa;
+}
+
+/* 紧凑短卡片 */
+.step-card{
+  width:100%;
+  background:#2a2d34;
+  border-radius:10px;
+  padding:12px 16px;
+  margin:6px 0;
+  text-align:left;
+  overflow:hidden;
+  opacity:0;
+  height:0;
+  transition: all 0.5s ease;
+}
+.step-card.show{
+  opacity:1;
+  height:auto;
+}
+.step-card.hide{
+  opacity:0;
+  height:0;
+  margin:0;
+  padding:0;
+}
+
+.step-item{
+  margin:8px 0;
+  font-size:15px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.step-icon{
+  width:16px;
+  height:16px;
+}
+@keyframes spin{
+  to{transform:rotate(360deg);}
+}
+.spin{
+  display:inline-block;
+  border:2px solid #fff;
+  border-top-color:transparent;
+  border-radius:50%;
+  animation:spin 0.8s linear infinite;
+}
+.check{
+  color:#4cd964;
+  font-weight:bold;
+  font-size:16px;
+}
+
+.success-text{
+  font-size:36px;
+  font-weight:bold;
+  color:#4cd964;
+  margin:10px 0;
+  display:none;
+}
+/* 恭喜成功页面紧凑 */
+.good-text{
+  font-size:24px;
+  color:#ffdd33;
+  margin:60px 0 30px;
+}
+.error-text{
+  font-size:36px;
+  font-weight:bold;
+  color:#ff4d4f;
+  margin:60px 0 30px;
+}
+</style>
+</head>
+<body>
+
+<div class="card" id="box">
+  <div class="title" id="title">我的应用</div>
+  <div class="page-container">
+    <!-- 主页面（紧凑版） -->
+    <div id="mainPage" class="page">
+      <button class="btn" onclick="openPage1()">开始</button>
+      <button class="btn" onclick="openPage2()">验证</button>
+      <button class="btn" onclick="exitApp()">返回</button>
+    </div>
+
+    <div id="page1" class="page hide">
+      <div class="progress-box" id="progressWrap">
+        <div class="progress-bar" id="bar"></div>
+        <div class="progress-text" id="perText">0%</div>
+      </div>
+      <input type="text" class="input-box" id="inputPwd" placeholder="请输入密码">
+
+      <div class="step-card" id="stepCard">
+        <div class="step-item">
+          <span class="step-icon" id="icon1">.</span>
+          <span>昆昆牛逼</span>
+        </div>
+        <div class="step-item">
+          <span class="step-icon" id="icon2">.</span>
+          <span>昆昆牛逼</span>
+        </div>
+        <div class="step-item">
+          <span class="step-icon" id="icon3">.</span>
+          <span>昆昆牛逼</span>
+        </div>
+      </div>
+
+      <div class="success-text" id="success">成功</div>
+      <button class="btn" onclick="checkPwd()">开始</button>
+      <button class="btn" onclick="backPage()">返回</button>
+    </div>
+
+    <!-- 恭喜成功（紧凑版） -->
+    <div id="page2" class="page hide">
+      <div class="good-text">恭喜成功</div>
+      <button class="btn" onclick="backPage()">返回</button>
+    </div>
+
+    <div id="errorPage" class="page hide">
+      <div class="error-text">错误</div>
+      <button class="btn" onclick="backPage()">返回</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const main=document.getElementById('mainPage');
+const page1=document.getElementById('page1');
+const page2=document.getElementById('page2');
+const errorPage=document.getElementById('errorPage');
+const title=document.getElementById('title');
+const bar=document.getElementById('bar');
+const success=document.getElementById('success');
+const progressWrap=document.getElementById('progressWrap');
+const inputPwd=document.getElementById('inputPwd');
+const perText=document.getElementById('perText');
+const stepCard=document.getElementById('stepCard');
+const icon1=document.getElementById('icon1');
+const icon2=document.getElementById('icon2');
+const icon3=document.getElementById('icon3');
+
+function openPage1(){
+  main.classList.add('hide');
+  page1.classList.remove('hide');
+  page2.classList.add('hide');
+  errorPage.classList.add('hide');
+  title.classList.add('hide');
+  success.style.display='none';
+  stepCard.className='step-card';
+  progressWrap.classList.remove('hide');
+  inputPwd.classList.remove('hide');
+  bar.style.width='0%';
+  perText.textContent='0%';
+  icon1.textContent='.';icon1.className='step-icon';
+  icon2.textContent='.';icon2.className='step-icon';
+  icon3.textContent='.';icon3.className='step-icon';
+  inputPwd.value='';
+}
+
+function openPage2(){
+  main.classList.add('hide');
+  page2.classList.remove('hide');
+  page1.classList.add('hide');
+  errorPage.classList.add('hide');
+  title.classList.add('hide');
+}
+
+function checkPwd(){
+  const pwd=inputPwd.value.trim();
+  if(pwd !== '666'){
+    setTimeout(()=>{
+      page1.classList.add('hide');
+      errorPage.classList.remove('hide');
+    },500);
+  }else{
+    inputPwd.classList.add('hide');
+    stepCard.classList.add('show');
+    runSteps();
+  }
+}
+
+function runSteps(){
+  const list=[icon1,icon2,icon3];
+  const add=100/3;
+  let idx=0;
+  function next(){
+    if(idx>=3){
+      setTimeout(()=>{
+        stepCard.classList.add('hide');
+        progressWrap.classList.add('hide');
+        setTimeout(()=>{success.style.display='block';},500);
+      },300);
+      return;
+    }
+    const i=list[idx];
+    i.className='step-icon spin';
+    setTimeout(()=>{
+      i.className='step-icon check';
+      i.textContent='✓';
+      let w=(idx+1)*add;
+      bar.style.width=w+'%';
+      perText.textContent=Math.round(w)+'%';
+      idx++;next();
+    },1000);
+  }
+  next();
+}
+
+function backPage(){
+  bar.style.width='0%';
+  perText.textContent='0%';
+  setTimeout(()=>{
+    main.classList.remove('hide');
+    page1.classList.add('hide');
+    page2.classList.add('hide');
+    errorPage.classList.add('hide');
+    title.classList.remove('hide');
+    success.style.display='none';
+    stepCard.className='step-card';
+    progressWrap.classList.remove('hide');
+    inputPwd.classList.remove('hide');
+    icon1.textContent='.';icon1.className='step-icon';
+    icon2.textContent='.';icon2.className='step-icon';
+    icon3.textContent='.';icon3.className='step-icon';
+  },100);
+}
+
+function exitApp(){
+  box.innerHTML = '<div style="color:#fff;text-align:center;padding:20px;">无法退出，请自行退出</div>';
+}
+</script>
+</body>
+</html>
